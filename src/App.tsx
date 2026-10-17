@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, onSnapshot, query } from 'firebase/firestore';
 
-// 1. تشغيل اتصال قوقل السحابي بالمفاتيح المباشرة التي ولدتها لـ Roumaissa Édition
 const firebaseConfig = {
   apiKey: "AIzaSyCUFqZlnWT1Cy5Ycq0OBJG1_TFpIBmirZQ", 
   authDomain: "://firebaseapp.com",
   projectId: "maisoneditionrumaysa",
   storageBucket: "://appspot.com",
-  messagingSenderId: "389274920184", // ضع هنا الأرقام الخاصة بـ messagingSenderId من شاشتك
-  appId: "1:389274920184:web:..." // ضع هنا كود appId الخاص بك
+  messagingSenderId: "389274920184", 
+  appId: "1:389274920184:web:e39ab82d49c0c1b4b2ef67"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -22,7 +21,6 @@ interface Book {
 export default function App() {
   const [books, setBooks] = useState<Book[]>([]);
 
-  // 2. المزامنة اللحظية الفورية الحية: جلب البيانات في نفس الثانية بين الهاتف والكمبيوتر
   useEffect(() => {
     const q = query(collection(db, "books"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -30,12 +28,11 @@ export default function App() {
       querySnapshot.forEach((doc) => {
         booksArray.push({ id: doc.id, ...doc.data() } as Book);
       });
-      setBooks(booksArray); // التحديث الفوري للواجهة عند إضافة أي كتاب من الهاتف
+      setBooks(booksArray);
     });
     return () => unsubscribe();
   }, []);
 
-  // 3. الحماية الحديدية للأدمن ومنع نسخ ونقل نصوص الكتب للزوار
   useEffect(() => {
     const isAdmin = window.location.href.includes('admin') || localStorage.getItem('user_role') === 'admin';
     if (!isAdmin) {
@@ -69,7 +66,7 @@ export default function App() {
             <div className="text-2xl font-bold text-amber-700 my-2">{bestSeller.price} دج</div>
           </div>
           <div className="border p-4 rounded bg-gray-50 flex flex-col justify-center">
-            <button onClick={() => alert("يجب إتمام عملية الشراء عبر كارد الذهبية أولاً تحميل ملف الـ ePub.")} className="bg-amber-600 text-white py-2 rounded font-bold">
+            <button onClick={() => alert("يجب إتمام عملية الشراء أولاً لتحميل ملف الـ ePub.")} className="bg-amber-600 text-white py-2 rounded font-bold">
               📥 تحميل ملف الـ ePub المرخص
             </button>
           </div>
